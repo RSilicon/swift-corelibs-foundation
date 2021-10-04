@@ -503,10 +503,10 @@ CF_INLINE uint32_t __CFCSetGetCompactBitmapSize(const uint8_t *compactBitmap) {
 
 CF_INLINE void __CFExpandCompactBitmap(const uint8_t *src, uint8_t *dst) {
     const uint8_t *srcBody = src + __kCFCompactBitmapNumPages;
-    int i;
+    unsigned int i;
     uint8_t value;
 
-    for (i = 0;i < __kCFCompactBitmapNumPages;i++) {
+    for (i = __kCFCompactBitmapNumPages;i > 0;i--) {
         value = *(src++);
         if ((value == 0) || (value == UINT8_MAX)) {
             memset(dst, value, __kCFCompactBitmapPageSize);

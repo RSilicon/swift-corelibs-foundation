@@ -83,7 +83,7 @@ CFStringRef _CFListFormatterCreateStringByJoiningStrings(CFAllocatorRef allocato
     CFAssert1(locale != NULL, __kCFLogAssertion, "%s(): locale should not be NULL", __PRETTY_FUNCTION__);
 
     UChar** ucharStrings = malloc(sizeof(UChar *) * count);
-    int32_t* uStringLengths = malloc(sizeof(int32_t) * count);
+    CFIndex* uStringLengths = malloc(sizeof(CFIndex) * count);
     bool *needsFree = calloc(count, sizeof(bool));
 
     CFStringRef string;

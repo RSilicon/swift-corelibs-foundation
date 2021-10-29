@@ -1843,7 +1843,7 @@ static bool __CFLocaleICUKeywordValueName(const char *locale, const char *value,
 }
 
 static bool __CFLocaleICUCurrencyName(const char *locale, const char *value, UCurrNameStyle style, CFStringRef *out) {
-    int valLen = strlen(value);
+    int32_t valLen = strlen(value);
     if (valLen != 3) // not a valid ISO code
         return false;
     UChar curr[4];

@@ -456,9 +456,9 @@ CF_PRIVATE CFStringRef _CFStringCreateFormatWithInflectionAndArguments(CFAllocat
 
 /* result is long long or int, depending on doLonglong
 */
-extern Boolean __CFStringScanInteger(CFStringInlineBuffer *buf, CFTypeRef locale, SInt32 *indexPtr, Boolean doLonglong, void *result);
-extern Boolean __CFStringScanDouble(CFStringInlineBuffer *buf, CFTypeRef locale, SInt32 *indexPtr, double *resultPtr); 
-extern Boolean __CFStringScanHex(CFStringInlineBuffer *buf, SInt32 *indexPtr, unsigned *result);
+extern Boolean __CFStringScanInteger(CFStringInlineBuffer *buf, CFTypeRef locale, CFIndex *indexPtr, Boolean doLonglong, void *result);
+extern Boolean __CFStringScanDouble(CFStringInlineBuffer *buf, CFTypeRef locale, CFIndex *indexPtr, double *resultPtr); 
+extern Boolean __CFStringScanHex(CFStringInlineBuffer *buf, CFIndex *indexPtr, unsigned *result);
 
 extern const char *__CFgetenv(const char *n);
 extern const char *__CFgetenvIfNotRestricted(const char *n);    // Returns NULL in a restricted process

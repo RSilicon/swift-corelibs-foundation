@@ -37,7 +37,7 @@ CF_INLINE SInt32 __CFCharacterNumericValue(UniChar ch) {
     return (ch >= '0' && ch <= '9') ? (ch - '0') : -1;
 }
 
-CF_INLINE UniChar __CFStringGetFirstNonSpaceCharacterFromInlineBuffer(CFStringInlineBuffer *buf, SInt32 *indexPtr) {
+CF_INLINE UniChar __CFStringGetFirstNonSpaceCharacterFromInlineBuffer(CFStringInlineBuffer *buf, CFIndex *indexPtr) {
     UniChar ch;
     while (__CFIsWhitespace(ch = __CFStringGetCharacterFromInlineBufferAux(buf, *indexPtr))) (*indexPtr)++;
     return ch;
@@ -45,7 +45,7 @@ CF_INLINE UniChar __CFStringGetFirstNonSpaceCharacterFromInlineBuffer(CFStringIn
 
 /* result is int64_t or int, depending on doLonglong
 */
-CF_PRIVATE Boolean __CFStringScanInteger(CFStringInlineBuffer *buf, CFTypeRef locale, SInt32 *indexPtr, Boolean doLonglong, void *result) {
+CF_PRIVATE Boolean __CFStringScanInteger(CFStringInlineBuffer *buf, CFTypeRef locale, CFIndex *indexPtr, Boolean doLonglong, void *result) {
     Boolean doingLonglong = false;	/* Set to true if doLonglong, and we overflow an int... */
     Boolean neg = false;
     int intResult = 0;
@@ -103,7 +103,7 @@ CF_PRIVATE Boolean __CFStringScanInteger(CFStringInlineBuffer *buf, CFTypeRef lo
     return true;
 }
 
-CF_PRIVATE Boolean __CFStringScanHex(CFStringInlineBuffer *buf, SInt32 *indexPtr, unsigned *result) {
+CF_PRIVATE Boolean __CFStringScanHex(CFStringInlineBuffer *buf, CFIndex *indexPtr, unsigned *result) {
     UInt32 value = 0;
     SInt32 curDigit;
     UniChar ch;
@@ -157,7 +157,7 @@ static const unsigned char __CFNumberSet[16] = {
     0X00, // 0, 0, 0, 0, 0, 0, 0, 0  //  x   y   z   {   |   }   ~  del
 };
 
-CF_PRIVATE Boolean __CFStringScanDouble(CFStringInlineBuffer *buf, CFTypeRef locale, SInt32 *indexPtr, double *resultPtr) {
+CF_PRIVATE Boolean __CFStringScanDouble(CFStringInlineBuffer *buf, CFTypeRef locale, CFIndex *indexPtr, double *resultPtr) {
     #define STACK_BUFFER_SIZE 256
     #define ALLOC_CHUNK_SIZE 256 // first and subsequent malloc size.  Should be greater than STACK_BUFFER_SIZE
     char localCharBuffer[STACK_BUFFER_SIZE];

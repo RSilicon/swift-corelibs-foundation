@@ -285,7 +285,7 @@ _CF_SORT_INDEXES_EXPORT void CFSortIndexes(CFIndex *indexBuffer, CFIndex count, 
         CRSetCrashLogMessage("Size of array to be sorted is too big");
         HALT;
     }
-    int32_t ncores = 0;
+    CFIndex ncores = 0;
     if (opts & kCFSortConcurrent) {
         ncores = __CFActiveProcessorCount();
         if (count < 160 || ncores < 2) {

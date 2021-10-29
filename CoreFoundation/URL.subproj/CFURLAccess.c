@@ -208,7 +208,7 @@ static Boolean _CFFileURLWritePropertiesToResource(CFURLRef url, CFDictionaryRef
     CFTypeRef *keys;
     CFTypeRef *values;
     Boolean result = true;
-    SInt32 idx, count;
+    CFIndex idx, count;
     char cPath[CFMaxPathSize];
 
     if (!CFURLGetFileSystemRepresentation(url, true, (unsigned char *)cPath, CFMaxPathSize)) {
@@ -230,12 +230,6 @@ static Boolean _CFFileURLWritePropertiesToResource(CFURLRef url, CFDictionaryRef
         CFStringRef key = (CFStringRef)keys[idx];
         CFTypeRef value = values[idx];
         if (key == kCFURLFilePOSIXMode || CFEqual(kCFURLFilePOSIXMode, key)) {
-            SInt32 mode;
-            int err;
-            if (CFNumberGetTypeID() == CFGetTypeID(value)) {
-                CFNumberRef modeNum = (CFNumberRef)value;
-                CFNumberGetValue(modeNum, kCFNumberSInt32Type, &mode);
-            } else {
 #if TARGET_OS_MAC || TARGET_OS_LINUX || TARGET_OS_BSD || TARGET_OS_WASI
 #define MODE_TYPE mode_t
 #elif TARGET_OS_WIN32
@@ -243,6 +237,12 @@ static Boolean _CFFileURLWritePropertiesToResource(CFURLRef url, CFDictionaryRef
 #else
 #error Unknown or unspecified DEPLOYMENT_TARGET
 #endif
+            mode_t mode;
+            int err;
+            if (CFNumberGetTypeID() == CFGetTypeID(value)) {
+                CFNumberRef modeNum = (CFNumberRef)value;
+                CFNumberGetValue(modeNum, kCFNumberSInt32Type, &mode);
+            } else {
                 const MODE_TYPE *modePtr = (const MODE_TYPE *)CFDataGetBytePtr((CFDataRef)value);
                 mode = *modePtr;
             }
@@ -435,10 +435,10 @@ static CFDataRef percentEscapeDecodeBuffer(CFAllocatorRef alloc, const UInt8* sr
     CFIndex i;
     CFIndex j;
     for (i = range.location, j = 0; i < end; ++i) {
-		char value;
+		UInt8 value;
 		
 		if (srcBuffer[i] == '%' && end > i + 2 && isHexDigit(srcBuffer[i+1]) && isHexDigit(srcBuffer[i+2])) {
-			value = hexDigitValue(srcBuffer[i+1]) * 16 + hexDigitValue(srcBuffer[i+2]);
+			value = (UInt8) (hexDigitValue(srcBuffer[i + 1]) * 16 + hexDigitValue(srcBuffer[i + 2]));
 			i += 2;
 		} else {
 			value = srcBuffer[i];
@@ -772,7 +772,7 @@ Boolean CFURLWriteDataAndPropertiesToResource(CFURLRef url, CFDataRef data, CFDi
                 }
             } else {
                // Write data
-                SInt32 length = CFDataGetLength(data);
+                CFIndex length = CFDataGetLength(data);
                 const void *bytes = (0 == length) ? (const void *)"" : CFDataGetBytePtr(data);
                 success = _CFWriteBytesToFile(url, bytes, length);
                 if (!success && errorCode) *errorCode = kCFURLUnknownError;

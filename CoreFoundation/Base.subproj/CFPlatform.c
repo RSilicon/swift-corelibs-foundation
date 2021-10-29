@@ -553,7 +553,7 @@ CF_EXPORT CFURLRef CFCopyHomeDirectoryURLForUser(CFStringRef uName) {
         return _CFCopyHomeDirURLForUser(NULL, true);
     } else {
         char buf[128], *user;
-        SInt32 len = CFStringGetLength(uName), size = CFStringGetMaximumSizeForEncoding(len, kCFPlatformInterfaceStringEncoding);
+        CFIndex len = CFStringGetLength(uName), size = CFStringGetMaximumSizeForEncoding(len, kCFPlatformInterfaceStringEncoding);
         CFIndex usedSize;
         if (size < 127) {
             user = buf;

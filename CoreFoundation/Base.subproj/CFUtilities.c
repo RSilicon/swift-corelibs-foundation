@@ -177,7 +177,7 @@ CF_PRIVATE CFIndex CFBSearch(const void *element, CFIndex elementSize, const voi
 CFHashCode CFHashBytes(uint8_t *bytes, CFIndex length) {
     /* The ELF hash algorithm, used in the ELF object file format */
     UInt32 H = 0, T1, T2;
-    SInt32 rem = length;
+    CFIndex rem = length;
     while (3 < rem) {
 	ELF_STEP(bytes[length - rem]);
 	ELF_STEP(bytes[length - rem + 1]);

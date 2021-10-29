@@ -3397,7 +3397,8 @@ SInt32 CFURLGetPortNumber(CFURLRef  anURL) {
     __CFGenericValidateType(anURL, CFURLGetTypeID());
     port = _retainedComponentString(anURL, HAS_PORT, true, false);
     if (port) {
-        SInt32 portNum, idx, length = CFStringGetLength(port);
+        SInt32 portNum;
+        CFIndex idx, length = CFStringGetLength(port);
         CFStringInlineBuffer buf;
         CFStringInitInlineBuffer(port, &buf, CFRangeMake(0, length));
         idx = 0;
@@ -3530,8 +3531,8 @@ CFStringRef  CFURLCopyFragment(CFURLRef  anURL, CFStringRef  charactersToLeaveEs
 }
 
 static CFIndex insertionLocationForMask(CFURLRef url, CFOptionFlags mask) {
-    CFIndex firstMaskFlag = 1;
-    CFIndex lastComponentBeforeMask = 0;
+    UInt32 firstMaskFlag = 1;
+    UInt32 lastComponentBeforeMask = 0;
     while (firstMaskFlag <= HAS_FRAGMENT) {
         if (firstMaskFlag & mask) break;
         if (url->_flags & firstMaskFlag) lastComponentBeforeMask = firstMaskFlag;
@@ -3878,7 +3879,7 @@ static Boolean decomposeToRFC2396(CFURLRef url, CFURLComponentsRFC2396 *comp) {
     if (!oldComp.parameterString) {
         comp->pathComponents = oldComp.pathComponents;
     } else {
-        int length = CFArrayGetCount(oldComp.pathComponents);
+        CFIndex length = CFArrayGetCount(oldComp.pathComponents);
         comp->pathComponents = CFArrayCreateMutableCopy(alloc, length, oldComp.pathComponents);
         tmpStr = CFStringCreateWithFormat(alloc, NULL, CFSTR("%@;%@"), CFArrayGetValueAtIndex(comp->pathComponents, length - 1), oldComp.parameterString);
         CFArraySetValueAtIndex((CFMutableArrayRef)comp->pathComponents, length - 1, tmpStr);
@@ -4264,7 +4265,7 @@ static CFStringRef URLPathToWindowsPath(CFStringRef path, CFAllocatorRef allocat
     // Check for a drive letter, then flip all the slashes
     CFStringRef result;
     CFArrayRef tmp = CFStringCreateArrayBySeparatingStrings(allocator, path, CFSTR("/"));
-    SInt32 count = CFArrayGetCount(tmp);
+    CFIndex count = CFArrayGetCount(tmp);
     CFMutableArrayRef components = CFArrayCreateMutableCopy(allocator, count, tmp);
     CFStringRef newPath;
     

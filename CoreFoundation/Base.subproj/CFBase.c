@@ -170,7 +170,7 @@ static void __CFAllocatorCustomDestroy(malloc_zone_t *zone) {
     __CFAllocatorDeallocate(allocator);
 }
 
-static size_t __CFAllocatorCustomGoodSize(malloc_zone_t *zone, size_t size) {
+static CFIndex __CFAllocatorCustomGoodSize(malloc_zone_t *zone, size_t size) {
     CFAllocatorRef allocator = (CFAllocatorRef)zone;
     return CFAllocatorGetPreferredSizeForSize(allocator, size, 0);
 }

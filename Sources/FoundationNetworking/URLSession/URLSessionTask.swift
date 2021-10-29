@@ -1038,7 +1038,7 @@ extension _ProtocolClient : URLProtocolClient {
     }
 }
 extension URLSessionTask {
-    typealias _AuthHandler = ((URLSessionTask, URLSession.AuthChallengeDisposition, URLCredential?) -> ())
+    typealias _AuthHandler = (URLSessionTask, URLSession.AuthChallengeDisposition, URLCredential?) -> ()
 
     static func authHandler(for authScheme: String) -> _AuthHandler? {
         let handlers: [String : _AuthHandler] = [

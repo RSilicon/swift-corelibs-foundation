@@ -56,9 +56,9 @@
 #include <net/if_types.h>
 
 static inline void nanotime(struct timespec *tv) {
-    uint64_t now = mach_absolute_time();
-    tv->tv_sec = now / 1000000000;
-    tv->tv_nsec = now - (tv->tv_sec * 1000000000);
+    uint64_t now = clock_gettime_nsec_np(CLOCK_UPTIME_RAW);
+    tv->tv_sec = (__darwin_time_t) (now / 1000000000);
+    tv->tv_nsec = (long) (now - (tv->tv_sec * 1000000000));
 }
 
 #elif TARGET_OS_LINUX || TARGET_OS_BSD || TARGET_OS_WASI
@@ -164,8 +164,8 @@ uuid_generate_random(uuid_t out)
 {
 	read_random(out, sizeof(uuid_t));
 
-	out[6] = (out[6] & 0x0F) | 0x40;
-	out[8] = (out[8] & 0x3F) | 0x80;
+	out[6] = (uint8_t)((out[6] & 0x0F) | 0x40);
+	out[8] = (uint8_t)((out[8] & 0x3F) | 0x80);
 }
 
 void
@@ -186,8 +186,8 @@ uuid_generate_time(uuid_t out)
 	out[6] = (uint8_t)(time >> 56);
 	out[7] = (uint8_t)(time >> 48);
  
-	out[6] = (out[6] & 0x0F) | 0x10;
-	out[8] = (out[8] & 0x3F) | 0x80;
+	out[6] = (uint8_t)((out[6] & 0x0F) | 0x10);
+	out[8] = (uint8_t)((out[8] & 0x3F) | 0x80);
 }
 
 void

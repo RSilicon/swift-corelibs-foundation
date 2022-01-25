@@ -447,7 +447,7 @@ CF_INLINE CFCharacterSetRef __CFCSetGetAnnexPlaneCharacterSetNoAlloc(CFCharacter
 
 CF_INLINE void __CFCSetDeallocateAnnexPlane(CFCharacterSetRef cset) {
     if (cset->_annex) {
-        int idx;
+        uint32_t idx;
         
         for (idx = 0;idx < MAX_ANNEX_PLANE;idx++) {
             if (__CFCSetAnnexBitmapGetPlane(cset->_annex->_validEntriesBitmap, idx + 1)) {
@@ -460,19 +460,17 @@ CF_INLINE void __CFCSetDeallocateAnnexPlane(CFCharacterSetRef cset) {
     }
 }
 
-CF_INLINE uint8_t __CFCSetGetHeaderValue(const uint8_t *bitmap, int *numPages) {
+CF_INLINE uint8_t __CFCSetGetHeaderValue(const uint8_t *bitmap, uint8_t *numPages) {
+    uint32_t numBytes;
     uint8_t value = *bitmap;
 
-    if ((value == 0) || (value == UINT8_MAX)) {
-        int numBytes = __kCFCompactBitmapPageSize - 1;
-
-        while (numBytes > 0) {
-            if (*(++bitmap) != value) break;
-            --numBytes;
-        }
-        if (numBytes == 0) return value;
+    if ((value != 0) && (value != UINT8_MAX)) {
+        return (++(*numPages));
     }
-    return (uint8_t)(++(*numPages));
+    for (numBytes = __kCFCompactBitmapPageSize - 1; numBytes > 0; --numBytes) {
+        if (*(++bitmap) != value) return (++(*numPages));
+    }
+    return value;
 }
 
 CF_INLINE bool __CFCSetIsMemberInCompactBitmap(const uint8_t *compactBitmap, UTF16Char character) {
@@ -490,11 +488,11 @@ CF_INLINE bool __CFCSetIsMemberInCompactBitmap(const uint8_t *compactBitmap, UTF
 }
 
 CF_INLINE uint32_t __CFCSetGetCompactBitmapSize(const uint8_t *compactBitmap) {
-    uint32_t length = __kCFCompactBitmapNumPages;
-    uint32_t size = __kCFCompactBitmapNumPages;
+    uint32_t length;
+    uint32_t size;
     uint8_t value;
 
-    while (length-- > 0) {
+    for (size = length = __kCFCompactBitmapNumPages; length > 0; length--) {
         value = *(compactBitmap++);
         if ((value != 0) && (value != UINT8_MAX)) size += __kCFCompactBitmapPageSize;
     }
@@ -503,10 +501,10 @@ CF_INLINE uint32_t __CFCSetGetCompactBitmapSize(const uint8_t *compactBitmap) {
 
 CF_INLINE void __CFExpandCompactBitmap(const uint8_t *src, uint8_t *dst) {
     const uint8_t *srcBody = src + __kCFCompactBitmapNumPages;
-    unsigned int i;
     uint8_t value;
 
-    for (i = __kCFCompactBitmapNumPages;i > 0;i--) {
+    for (uint32_t i = __kCFCompactBitmapNumPages; i > 0; i--)
+    {
         value = *(src++);
         if ((value == 0) || (value == UINT8_MAX)) {
             memset(dst, value, __kCFCompactBitmapPageSize);
@@ -537,8 +535,8 @@ static void __CFCheckForExpandedSet(CFCharacterSetRef cset) {
             if ((entries & 1) && (++count >= __CFNumberOfPlanesForLogging)) {
                 if (!warnedOnce) {
                     CFLog(kCFLogLevelWarning, CFSTR("An expanded CFMutableCharacter has been detected.  Recommend to compact with CFCharacterSetCreateCopy"));
-		    warnedOnce = true;
-		}
+                    warnedOnce = true;
+                }
                 break;
             }
             entries >>= 1;
@@ -548,11 +546,11 @@ static void __CFCheckForExpandedSet(CFCharacterSetRef cset) {
 
 static void __CFCSetGetBitmap(CFCharacterSetRef cset, uint8_t *bits) {
     uint8_t *bitmap;
-    CFIndex length = __kCFBitmapSize;
 
     if (__CFCSetIsBitmap(cset) && (bitmap = __CFCSetBitmapBits(cset))) {
         memmove(bits, bitmap, __kCFBitmapSize);
     } else {
+        CFIndex length = __kCFBitmapSize;
         Boolean isInverted = __CFCSetIsInverted(cset);
         uint8_t value = (isInverted ? (uint8_t)-1 : 0);
 
@@ -610,7 +608,7 @@ static Boolean __CFCSetIsEqualAnnex(CFCharacterSetRef cf1, CFCharacterSetRef cf2
     CFCharacterSetRef subSet1;
     CFCharacterSetRef subSet2;
     Boolean isAnnexInvertStateIdentical = (__CFCSetAnnexIsInverted(cf1) == __CFCSetAnnexIsInverted(cf2) ? true: false);
-    int idx;
+    unsigned char idx;
 
     if (isAnnexInvertStateIdentical) {
         if (__CFCSetAnnexValidEntriesBitmap(cf1) != __CFCSetAnnexValidEntriesBitmap(cf2)) return false;
@@ -688,12 +686,12 @@ static Boolean __CFCSetIsEqualAnnex(CFCharacterSetRef cf1, CFCharacterSetRef cf2
 static uint8_t *__CFCreateCompactBitmap(CFAllocatorRef allocator, const uint8_t *bitmap) {
     const uint8_t *src;
     uint8_t *dst;
-    int i;
-    int numPages = 0;
+    uint8_t numPages = 0;
     uint8_t header[__kCFCompactBitmapNumPages];
+    uint32_t i;
 
     src = bitmap;
-    for (i = 0;i < __kCFCompactBitmapNumPages;i++) {
+    for (i = 0; i < __kCFCompactBitmapNumPages; i++) {
         header[i] = __CFCSetGetHeaderValue(src, &numPages);
 
         // Allocating more pages is probably not interesting enough to be compact
@@ -707,7 +705,7 @@ static uint8_t *__CFCreateCompactBitmap(CFAllocatorRef allocator, const uint8_t 
         uint8_t *dstBody = dst + __kCFCompactBitmapNumPages;
 
         src = bitmap;
-        for (i = 0;i < __kCFCompactBitmapNumPages;i++) {
+        for (i = 0; i < __kCFCompactBitmapNumPages; i++) {
             dst[i] = header[i];
     
             if ((dst[i] != 0) && (dst[i] != UINT8_MAX)) {
@@ -1745,7 +1743,7 @@ CF_CROSS_PLATFORM_EXPORT void _CFCharacterSetInitCopyingSet(CFAllocatorRef alloc
     }
     if (__CFCSetHasNonBMPPlane(theSet)) {
         CFMutableCharacterSetRef annexPlane;
-        int idx;
+        unsigned char idx;
 
         for (idx = 1;idx <= MAX_ANNEX_PLANE;idx++) {
             if ((annexPlane = (CFMutableCharacterSetRef)__CFCSetGetAnnexPlaneCharacterSetNoAlloc(theSet, idx))) {
@@ -1959,11 +1957,11 @@ Boolean CFCharacterSetIsSupersetOfSet(CFCharacterSetRef theSet, CFCharacterSetRe
                 if (theOtherSetAnnexMask) {
                     CFCharacterSetRef theSetAnnex;
                     CFCharacterSetRef theOtherSetAnnex;
-                    uint32_t idx;
+                    uint8_t idx;
 
                     if ((theSetAnnexMask & theOtherSetAnnexMask) != theOtherSetAnnexMask) return FALSE;
 
-                    for (idx = 1;idx <= 16;idx++) {
+                    for (idx = 1;idx <= MAX_ANNEX_PLANE;idx++) {
                         theSetAnnex = __CFCSetGetAnnexPlaneCharacterSetNoAlloc(theSet, idx);
                         if (NULL == theSetAnnex) continue; // This case is already handled by the mask above
 

@@ -21,7 +21,7 @@
 /// CoreFoundation SPI for finding the enclosing bundle. This is only
 /// ever called on older OSes, so there's no worry of running into
 /// trouble if the implementation is changed later on.
-extern "C" CFURLRef _CFBundleCopyBundleURLForExecutableURL(CFURLRef url);
+extern CFURLRef _CFBundleCopyBundleURLForExecutableURL(CFURLRef url);
 
 @implementation NSBundle (SwiftAdditions)
 

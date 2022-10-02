@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		15F987BD2475AB6E00451F92 /* Combine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15F987BC2475AB6E00451F92 /* Combine.framework */; };
 		7D0AE23323886AE9001948BD /* magic-symbols-for-install-name.c in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AE23223886AE9001948BD /* magic-symbols-for-install-name.c */; };
-		7D0AE23A23886B53001948BD /* BundleLookup.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AE23423886B50001948BD /* BundleLookup.mm */; };
+		7D0AE23A23886B53001948BD /* BundleLookup.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AE23423886B50001948BD /* BundleLookup.m */; };
 		7D0AE23B23886B53001948BD /* Calendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AE23523886B50001948BD /* Calendar.swift */; };
 		7D0AE23C23886B53001948BD /* CharacterSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AE23623886B51001948BD /* CharacterSet.swift */; };
 		7D0AE23E23886B53001948BD /* AffineTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AE23823886B52001948BD /* AffineTransform.swift */; };
@@ -139,7 +139,7 @@
 /* Begin PBXFileReference section */
 		15F987BC2475AB6E00451F92 /* Combine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Combine.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.16.Internal.sdk/System/Library/Frameworks/Combine.framework; sourceTree = DEVELOPER_DIR; };
 		7D0AE23223886AE9001948BD /* magic-symbols-for-install-name.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "magic-symbols-for-install-name.c"; sourceTree = "<group>"; };
-		7D0AE23423886B50001948BD /* BundleLookup.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BundleLookup.mm; sourceTree = "<group>"; };
+		7D0AE23423886B50001948BD /* BundleLookup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BundleLookup.m; sourceTree = "<group>"; };
 		7D0AE23523886B50001948BD /* Calendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Calendar.swift; sourceTree = "<group>"; };
 		7D0AE23623886B51001948BD /* CharacterSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharacterSet.swift; sourceTree = "<group>"; };
 		7D0AE23723886B52001948BD /* CheckClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckClass.swift; sourceTree = "<group>"; };
@@ -326,7 +326,7 @@
 				7D0AE23223886AE9001948BD /* magic-symbols-for-install-name.c */,
 				7D0AE23823886B52001948BD /* AffineTransform.swift */,
 				7D0AE23923886B53001948BD /* Boxing.swift */,
-				7D0AE23423886B50001948BD /* BundleLookup.mm */,
+				7D0AE23423886B50001948BD /* BundleLookup.m */,
 				7D0AE23523886B50001948BD /* Calendar.swift */,
 				7D0AE23623886B51001948BD /* CharacterSet.swift */,
 				7D0AE23723886B52001948BD /* CheckClass.swift */,
@@ -797,7 +797,7 @@
 				7D0AE2CC23888DE0001948BD /* CheckClass.swift in Sources */,
 				7D0AE27823886B83001948BD /* NSIndexSet.swift in Sources */,
 				7D0AE2BA23886B9F001948BD /* PersonNameComponents.swift in Sources */,
-				7D0AE23A23886B53001948BD /* BundleLookup.mm in Sources */,
+				7D0AE23A23886B53001948BD /* BundleLookup.m in Sources */,
 				7D0AE23C23886B53001948BD /* CharacterSet.swift in Sources */,
 				7D0AE2C623886BA0001948BD /* URLComponents.swift in Sources */,
 				7D0AE29223886B84001948BD /* Date.swift in Sources */,

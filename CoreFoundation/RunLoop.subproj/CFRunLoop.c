@@ -1306,7 +1306,8 @@ static Boolean __CFRunLoopSourceIsSignaled(CFRunLoopSourceRef rls) {
 }
 
 CF_INLINE void __CFRunLoopSourceSetSignaled(CFRunLoopSourceRef rls) {
-    atomic_compare_exchange_strong_explicit(&rls->_signaledTime, &(uint64_t){0}, mach_absolute_time(), memory_order_acq_rel, memory_order_acq_rel);
+    uint64_t zero = 0;
+    atomic_compare_exchange_strong_explicit(&rls->_signaledTime, &zero, mach_absolute_time(), memory_order_release, memory_order_relaxed);
 }
 
 CF_INLINE void __CFRunLoopSourceUnsetSignaled(CFRunLoopSourceRef rls) {

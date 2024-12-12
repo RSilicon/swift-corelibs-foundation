@@ -1212,7 +1212,7 @@ Boolean CFNumberIsFloatType(CFNumberRef number) {
 Boolean CFNumberGetValue(CFNumberRef number, CFNumberType type, void *valuePtr) {
 //printf("+ [%p] CFNumberGetValue(%p, %d, %p)\n", pthread_self(), number, type, valuePtr);
 
-    CF_OBJC_FUNCDISPATCHV(_kCFRuntimeIDCFNumber, Boolean, (NSNumber *)number, _getValue:(void *)valuePtr forType:(CFNumberType)__CFNumberTypeTable[type].canonicalType);
+    CF_OBJC_FUNCDISPATCHV(_kCFRuntimeIDCFNumber, Boolean, (NSNumber *)number, _getValue:valuePtr forType:(CFNumberType)__CFNumberTypeTable[type].canonicalType);
     CF_SWIFT_FUNCDISPATCHV(_kCFRuntimeIDCFNumber, Boolean, (CFSwiftRef)number, NSNumber._getValue, valuePtr, (CFNumberType)__CFNumberTypeTable[type].canonicalType);
     __CFAssertIsNumber(number);
     __CFAssertIsValidNumberType(type);
